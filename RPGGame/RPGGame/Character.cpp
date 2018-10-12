@@ -7,7 +7,7 @@
 using namespace std;
 
 Character::Character() { SetPrivateProperties(); }
-int Character::DamageCalculation(int Power) { return (Power / 5); }
+int Character::SpellPowerBonusDamage(int Power) { return (Power / 5); }
 int Character::GetMana(int inteligence) const { return (MageMana*inteligence); }
 
 void Character::SetPrivateProperties()

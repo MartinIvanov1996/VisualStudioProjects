@@ -16,10 +16,10 @@ int WolfMutant::Attacking()
 	return Damage;
 }
 
-int WolfMutant::HealthRemaining(int DamageTaken)
+int WolfMutant::HealthRemaining(int SpellDamage, int BonusDamageFromSPorEC)
 {
-	Vitality -= DamageTaken;
-	cout << "You hit wolf for " << DamageTaken << endl;
+	TotalInflictedDamage = SpellDamage + BonusDamageFromSPorEC;
+	Vitality -= TotalInflictedDamage;
 	cout << "Wolfs Remaining Health: " << Vitality << endl;
 	return Vitality;
 }
@@ -30,30 +30,31 @@ int FirstPaladin::Attacking()
 	return Damage;
 }
 
-int FirstPaladin::HealthRemaining(int DamageTaken, int OpponentPower)
+int FirstPaladin::HealthRemaining(int SpellDamage, int BonusDamageFromSPorEC)
 {
-	Character character;
 	MageItemsAndPowers magespells;
 
-	int ChosenSpell = DamageTaken - character.DamageCalculation(OpponentPower);
+	TotalInflictedDamage = SpellDamage + BonusDamageFromSPorEC;
+
 	if (Agility > 0) 
 	{
-		if (magespells.CanSpellBeDodged(ChosenSpell)) 
+		if (magespells.CanSpellBeDodged(SpellDamage))
 		{
 			cout << "Paladin dodged the attack, he looks more tired" << endl;
-			Agility -= DamageTaken;
+			Agility -= TotalInflictedDamage;
 		}
-		else if (!magespells.CanSpellBeDodged(ChosenSpell))
+		else if (!magespells.CanSpellBeDodged(SpellDamage))
 		{
 			cout << "Paladin tries to dodge but was not quick enough." << endl;
 			cout << "Lightning magic can not be dodged." << endl;
-			Vitality -= DamageTaken;
+			Vitality -= TotalInflictedDamage;
 		}
 	}
 	else if (Agility <= 0) 
 	{
 		cout << "Paladin could not dodge the attack he is too tired." << endl;
-		Vitality -= DamageTaken;
+		Vitality -= TotalInflictedDamage;
+		Agility = 0;
 	}
 	Agility += 5;
 	cout << "Paladin's Remaining Health: " << Vitality << endl;
@@ -66,19 +67,20 @@ int SecondPaladin::Attacking()
 	return Damage;
 }
 
-int SecondPaladin::HealthRemaining(int DamageTaken)
+int SecondPaladin::HealthRemaining(int SpellDamage, int BonusDamageFromSPorEC)
 {
-	cout << "You hit paladin for: " << DamageTaken << endl;
+	TotalInflictedDamage = SpellDamage + BonusDamageFromSPorEC;
+
 	if (Shield > 0) 
 	{
-		Shield -= DamageTaken;
+		Shield -= SpellDamage;
 		cout << "Paladin blocks with shield. A crack appears" << endl;
 		cout << "Shield durability: " << Shield << endl;
 	}
 	else 
 	{
 		cout << "The shield is broken and the paladin can no longer protect himself" << endl;
-		Vitality -= DamageTaken;
+		Vitality -= TotalInflictedDamage;
 	}
 	cout << "Paladin's Remaining Health: " << Vitality << endl;
 	return Vitality;
@@ -90,23 +92,19 @@ int EarthGolem::Attacking()
 	return Damage;
 }
 
-int EarthGolem::HealthRemaining(int DamageTaken, int OpponentPower)
+int EarthGolem::HealthRemaining(int SpellDamage, int BonusDamageFromSPorEC)
 {
-	Character character;
-	MageItemsAndPowers magespells;
-
-	int ChosenSpellDMG = DamageTaken - character.DamageCalculation(OpponentPower);
-	cout << "You hit golem for: " << DamageTaken << endl;
+	TotalInflictedDamage = SpellDamage + BonusDamageFromSPorEC;
 	if (EarthShield > 0)
 	{
-		if (ChosenSpellDMG == magespells.WindStrike)
+		if (SpellDamage == WindStrike)
 		{
 			cout << "Spell ignores shield and hits golem directly." << endl;
-			Vitality -= DamageTaken;
+			Vitality -= TotalInflictedDamage;
 		}
 		else
 		{
-			EarthShield -= DamageTaken;
+			EarthShield -= TotalInflictedDamage;
 			cout << "Golem is surounded by earth which protects him further." << endl;
 			cout << "Earth Shield durability: " << EarthShield << endl;
 		}
@@ -114,7 +112,7 @@ int EarthGolem::HealthRemaining(int DamageTaken, int OpponentPower)
 	else
 	{
 		cout << "Golem takes the hit." << endl;
-		Vitality -= DamageTaken;
+		Vitality -= TotalInflictedDamage;
 	}
 	cout << "Golem's Remaining Health: " << Vitality << endl;
 	return Vitality;
@@ -126,27 +124,24 @@ int FireElemental::Attacking()
 	return Damage;
 }
 
-int FireElemental::HealthRemaining(int DamageTaken, int OpponentPower)
+int FireElemental::HealthRemaining(int SpellDamage, int BonusDamageFromSPorEC)
 {
-	Character character;
-	MageItemsAndPowers magespells;
-
-	int ChosenSpellDMG = DamageTaken - character.DamageCalculation(OpponentPower);
+	int FireProtection = 60;
+	TotalInflictedDamage = SpellDamage + BonusDamageFromSPorEC;
 	FireProtection += 3;
 
-	cout << "You hit elemental for: " << DamageTaken << endl;
 	if (FireProtection > 0) 
 	{
-		if (ChosenSpellDMG == magespells.IceBall) 
+		if (SpellDamage == IceBall)
 		{
 			cout << "The fire begins to fade. You need to put the fire out." << endl;
-			FireProtection -= DamageTaken;
+			FireProtection -= TotalInflictedDamage;
 		}
-		else if (ChosenSpellDMG == magespells.FireBall) 
+		else if (SpellDamage == FireBall || SpellDamage == Inferno)
 		{
 			cout << "For some reason you attack the fire elemental which has fire as protection with fire." << endl;
 			cout << "Good job on that one." << endl;
-			Vitality += DamageTaken;
+			Vitality += TotalInflictedDamage;
 		}
 		else
 		{
@@ -193,36 +188,35 @@ int ThirdAndFourthPaladin::Skills(int agility)
 
 int ThirdAndFourthPaladin::Attacking()
 {
-	int DMGFromSkill;
 	DMGFromSkill = Skills(Agility);
 	cout << "Damage Inflicted by paladin: " << (Damage + DMGFromSkill)<< endl;
 	return (Damage + DMGFromSkill);
 }
 
-int ThirdAndFourthPaladin::HealthRemaining(int DamageTaken, int OpponentPower)
+int ThirdAndFourthPaladin::HealthRemaining(int SpellDamage, int BonusDamageFromSPorEC)
 {
-	Character character;
 	MageItemsAndPowers magespells;
 
-	int ChosenSpellDMG = DamageTaken - character.DamageCalculation(OpponentPower);
+	TotalInflictedDamage = SpellDamage + BonusDamageFromSPorEC;
+
 	if (Agility > 0)
 	{
-		if (magespells.CanSpellBeDodged(ChosenSpellDMG))
+		if (magespells.CanSpellBeDodged(SpellDamage))
 		{
 			cout << "Paladin dodged the attack, he looks more tired" << endl;
-			Agility -= DamageTaken;
+			Agility -= TotalInflictedDamage;
 		}
-		else if (!magespells.CanSpellBeDodged(ChosenSpellDMG))
+		else if (!magespells.CanSpellBeDodged(SpellDamage))
 		{
 			cout << "Paladin tries to dodge but was not quick enough." << endl;
 			cout << "Lightning magic can not be dodged." << endl;
-			Vitality -= DamageTaken;
+			Vitality -= TotalInflictedDamage;
 		}
 	}
 	else if (Agility <= 0)
 	{
 		cout << "Paladin could not dodge the attack he is too tired." << endl;
-		Vitality -= DamageTaken;
+		Vitality -= TotalInflictedDamage;
 		Agility = 0;
 	}
 	Agility += 2;
@@ -235,7 +229,7 @@ int FinalGuardian::Attacking()
 {
 	cout << "The Guardian Swings his first sword inflicting " << Damage << endl;
 	cout << "His second sword inflictins " << (Damage + SecondSwordBonusDMG) << endl;
-	return (Damage + Damage + SecondSwordBonusDMG);
+	return (2*Damage + SecondSwordBonusDMG);
 }
 
 int FinalGuardian::Skills()
@@ -268,21 +262,19 @@ int FinalGuardian::Skills()
 	return 0;
 }
 
-int FinalGuardian::HealthRemaining(int DamageTaken, int OpponentPower)
+int FinalGuardian::HealthRemaining(int SpellDamage, int BonusDamageFromSPorEC)
 {
-	Character character;
-	MageItemsAndPowers magespells;
+	TotalInflictedDamage = SpellDamage + BonusDamageFromSPorEC;
 
-	int ChosenSpellDMG = DamageTaken - character.DamageCalculation(OpponentPower);
 	if (IceArmor <=0) 
 	{
-		if (FireAmulet > 0 && ChosenSpellDMG == magespells.WindStrike) 
+		if (FireAmulet > 0 && SpellDamage == WindStrike)
 		{
 			cout << "The wind knocks down the guardian and the Amulet of fire falls off from him and breaks on the ground." << endl;
 			AvailableSkills--;
 			FireAmulet = 0;
 		}
-		else if (EarthRing > 0 && ChosenSpellDMG == magespells.WaterWave) 
+		else if (EarthRing > 0 && SpellDamage == WaterWave)
 		{
 			cout << "Water makes the mud wet. The ring falls off his hand." << endl;
 			AvailableSkills--;
@@ -290,20 +282,19 @@ int FinalGuardian::HealthRemaining(int DamageTaken, int OpponentPower)
 		}
 		else 
 		{
-			if (FireAmulet > 0 && (ChosenSpellDMG == magespells.FireBall || ChosenSpellDMG == magespells.Inferno)) 
+			if (FireAmulet > 0 && (SpellDamage == FireBall || SpellDamage == Inferno))
 			{
 				cout << "Since the amulet is on the guardian fire damage cannot harm him. Your spell does nothing." << endl;
 				return Vitality;
 			}
 			cout << "You hit the Guardian and there is an effect, he looks angrier." << endl;
-			cout << "The Guardian Takes " << DamageTaken << " DMG." << endl;
-			Vitality -= DamageTaken;
+			Vitality -= TotalInflictedDamage;
 		}
 	}
-	else if (ChosenSpellDMG == magespells.Implosion || ChosenSpellDMG == magespells.JadeBlast)
+	else if (SpellDamage == Implosion || SpellDamage == JadeBlast)
 	{
 		cout << "The earth tries to shatter the armor of ice" << endl;
-		IceArmor -= DamageTaken;
+		IceArmor -= SpellDamage;
 		cout << "Armor Strength: " << IceArmor << endl;
 		if (IceArmor <= 0) 
 		{
@@ -340,51 +331,47 @@ int TheKing::Attacking()
 {
 	srand(time(NULL));
 	int ChosenWeapon = rand() % AvailableWeapons;
-	int ChosenSkill;
 	if (ChosenWeapon == 0) 
 	{
 		cout << "The king swings his dagger and hits you." << endl;
-		ChosenSkill = Skills();
-		cout << "Damage taken: " << (Dagger + ChosenSkill) << endl;
+		DMGFromSkill = Skills();
+		cout << "Damage taken: " << (Dagger + DMGFromSkill) << endl;
 		return (Dagger + Skills());
 	}
 	else if (ChosenWeapon == 1) 
 	{
 		cout << "The king swings his hammer and hits you." << endl;
-		ChosenSkill = Skills();
-		cout << "Damage taken: " << (Hammer + ChosenSkill) << endl;
-		return (Hammer + ChosenSkill);
+		DMGFromSkill = Skills();
+		cout << "Damage taken: " << (Hammer + DMGFromSkill) << endl;
+		return (Hammer + DMGFromSkill);
 	}
 	else 
 	{
 		cout << "The king swings his sword and hits you." << endl;
-		ChosenSkill = Skills();
-		cout << "Damage taken: " << (Sword + ChosenSkill) << endl;
-		return (Sword + ChosenSkill);
+		DMGFromSkill = Skills();
+		cout << "Damage taken: " << (Sword + DMGFromSkill) << endl;
+		return (Sword + DMGFromSkill);
 	}
 	return 0;
 }
 
-int TheKing::HealthRemaining(int DamageTaken, int OpponentPower)
+int TheKing::HealthRemaining(int SpellDamage, int BonusDamageFromSPorEC)
 {
-	Character character;
-	MageItemsAndPowers magespells;
+	TotalInflictedDamage = SpellDamage + BonusDamageFromSPorEC;
 
-	int ChosenSpellDMG = DamageTaken - character.DamageCalculation(OpponentPower);
-	
-	if (IsVulnerableToLightning && ChosenSpellDMG == magespells.LightningBlast || ChosenSpellDMG == magespells.ElectricSurge)
+	if (IsVulnerableToLightning && SpellDamage == LightningBlast || SpellDamage == ElectricSurge)
 	{
 		cout << "The water and lightning magic immobilise the king, even though the king can still attack, your next spell is sure to hit." << endl;
 		IsStuned = true;
 		return Vitality;
 	}
-	else if (!IsVulnerableToLightning && ChosenSpellDMG == magespells.LightningBlast || ChosenSpellDMG == magespells.ElectricSurge)
+	else if (!IsVulnerableToLightning && SpellDamage == LightningBlast || SpellDamage == ElectricSurge)
 	{
 		cout << "The king dodges the lightning attack. This is unexpected, immpossible even. The king really is not like the others." << endl;
 		return Vitality;
 	}
 
-	if (ChosenSpellDMG == magespells.WaterWave) 
+	if (SpellDamage == WaterWave)
 	{
 		cout << "The king finds your attack funny and tells you he already had a bath today." << endl;
 		IsVulnerableToLightning = true;
@@ -393,16 +380,16 @@ int TheKing::HealthRemaining(int DamageTaken, int OpponentPower)
 
 	if (IsStuned)
 	{
-		if (HaveOpportunityForKill && IsStuned)
+		if (HaveOpportunityForKill)
 		{
-			if (ChosenSpellDMG == magespells.WindStrike)
+			if (SpellDamage == WindStrike)
 			{
 				Vitality = 0;
 				return Vitality;
 			}
 		}
-		cout << "Your hit shakes the king and he regains his mobility. The battle betwen you and the soaked king continues." << endl;
-		Vitality -= DamageTaken;
+		cout << "Your hit shakes the king and he regains his mobility. The king is still wet from your spell. The battle betwen you and the soaked king continues." << endl;
+		Vitality -= TotalInflictedDamage;
 	}
 	else if (!IsStuned)
 	{
@@ -412,7 +399,7 @@ int TheKing::HealthRemaining(int DamageTaken, int OpponentPower)
 
 	if (Vitality <= 1) 
 	{
-		cout << "The king is pushed back on the top of the hill. He starts gathering his strenght" << endl;
+		cout << "The king is pushed back on the top of the hill. He starts gathering his strenght and he is no longer stunned." << endl;
 		HaveOpportunityForKill = true;
 		Vitality = 1;
 	}

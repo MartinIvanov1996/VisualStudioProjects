@@ -17,7 +17,7 @@ public:
 	Character();
 	void SetPrivateProperties();
 	AttribtesMage MageClass();
-	int DamageCalculation(int);
+	int SpellPowerBonusDamage(int);
 	bool IsCharacterDead(int);
 
 private:

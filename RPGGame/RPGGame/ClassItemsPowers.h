@@ -1,6 +1,27 @@
 #pragma once
 #include "Character.h"
 
+const int ElementBonus = 15;
+const int NumberOfSpellsPerList = 3;
+
+//defence spells
+const int IceBarier = 5;
+const int EnergyShield = 8;
+const int FrosShield = 10;
+
+///offence spells
+const int FireBall = 10;
+const int JadeBlast = 8;
+const int LightningBlast = 6;
+//second list of spells
+const int IceBall = 1;
+const int WindStrike = 2;
+const int WaterWave = 3;
+//third list of spells
+const int Inferno = 25;
+const int Implosion = 35;
+const int ElectricSurge = 20;
+
 struct MageWeapons 
 {
 	const int WitchStaff = 15;
@@ -25,14 +46,6 @@ struct MageArmor
 class MageItemsAndPowers 
 {
 public:
-	//Classes that depend on type of spells used
-	friend class FightingSequenceMage;
-	friend class EarthGolem;
-	friend class FireElemental;
-	friend class FinalGuardian;
-	friend class TheKing;
-
-	MageItemsAndPowers();
 	int SpellsToShow();
 	int AddSpellList();
 	int MageOffenceSpells(int);
@@ -47,30 +60,8 @@ public:
 	bool CanSpellBeDodged(int);
 
 private:
-	const int NumberOfSpellsPerList = 3;
-
 	int GetLowestCostSpell();
-	// sets magic and item values
-	void SetItemsSpellStats();
 
-	int IncrementSpellList;
-
-	//defence spells
-	int IceBarier;
-	int EnergyShield;
-	int FrosShield;
-
-	///offence spells
-	int FireBall;
-	int JadeBlast;
-	int LightningBlast;
-	//second list of spells
-	int IceBall;
-	int WindStrike;
-	int WaterWave;
-	//third list of spells
-	int Inferno;
-	int Implosion;
-	int ElectricSurge;
+	int IncrementSpellList = 1;
 
 };

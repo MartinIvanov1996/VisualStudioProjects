@@ -15,7 +15,6 @@ public:
 	int KingFight(int,int,int);
 private:
 	int PreviousSpell = 0;
-	int ElementalChainBonus = 0;
 	//variable is used in all fights setting itself as the remaining health 
 	int EnemyHealth = 1;
 };

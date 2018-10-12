@@ -3,11 +3,15 @@
 class Enemies
 {
 public:
+	virtual int Attacking() = 0;
+	virtual int HealthRemaining(int,int) = 0;
 	void SetDamage(int);
 	void SetVitality(int);
 protected:
 	int Damage;
 	int Vitality;
+	int TotalInflictedDamage;
+	int DMGFromSkill;
 };
 
 //MAGE FIGHTS
@@ -16,7 +20,7 @@ class WolfMutant : public Enemies
 {
 public:
 	int Attacking();
-	int HealthRemaining(int);
+	int HealthRemaining(int, int);
 
 };
 
@@ -24,7 +28,7 @@ class FirstPaladin : public Enemies
 {
 public:
 	int Attacking();
-	int HealthRemaining(int,int);
+	int HealthRemaining(int, int);
 private:
 
 	int Agility = 30;
@@ -34,7 +38,7 @@ class SecondPaladin : public Enemies
 {
 public:
 	int Attacking();
-	int HealthRemaining(int);
+	int HealthRemaining(int, int);
 
 private:
 	int Shield = 30;
@@ -55,8 +59,7 @@ class FireElemental : public Enemies
 public:
 	int Attacking();
 	int HealthRemaining(int, int);
-private:
-	int FireProtection = 60;
+
 };
 
 class ThirdAndFourthPaladin : public Enemies

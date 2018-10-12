@@ -114,7 +114,7 @@ bool MageStory::FirstTombPuzzle()
 
 void MageStory::RematchInfrontOfTheTomb()
 {
-	cout << "Following the the brightest ligt you can find you find a way out." << endl;
+	cout << "Following the brightest ligt you can find you find a way out." << endl;
 	cout << "Right infront of the tomb the paladin awaits you. Aditional armor and a strange glow from his shield catch your attention." << endl;
 	cout << "The shield is enhanced this time. The eyes of the paladin confirm that this time he wont hold back." << endl;
 	cout << "You both prepare for battle." << endl;

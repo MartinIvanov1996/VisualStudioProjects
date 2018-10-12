@@ -11,6 +11,7 @@ using namespace std;
 // MAGE FIGHTING SEQUENCE
 
 // Enemy health set to 1 in all fight in beggining for protection of early cycle exit
+
 int FightingSequenceMage::WolfFight(int SpellPower, int Intelligence, int Vitality)
 {
 	Character character;
@@ -21,27 +22,26 @@ int FightingSequenceMage::WolfFight(int SpellPower, int Intelligence, int Vitali
 	enemywolf->SetVitality(30);
 
 	EnemyHealth = 1;
-	int DMG = character.DamageCalculation(SpellPower);
 	int Response[2];
 	int ChosenSpell[2];
 	int Mana = character.GetMana(Intelligence);
 	cout << "Current mana: " << Mana << endl;
-	MagePowers.DefenceSPellsInfo(SpellPower);
 	do
 	{
+		MagePowers.DefenceSPellsInfo(SpellPower);
 		cin >> Response[0];
 		if (cin.fail())
 		{
-			cout << "Invalid. Your Response must be a number not a character. Please type in a number:" << endl;
+			cout << "Invalid. Your Response must be a number not a character or 0. Please type in a number:" << endl;
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		}
 	} while (Response[0] == 0);
-	if (Response[0] <= MagePowers.NumberOfSpellsPerList && Response[0] > 0)
+	if (Response[0] <= NumberOfSpellsPerList && Response[0] > 0)
 	{
 		ChosenSpell[0] = MagePowers.MageDefenceSpells(Response[0]);
 		Mana -= MagePowers.SpellManaCost(ChosenSpell[0]);
-		Vitality += (ChosenSpell[0] + DMG);
+		Vitality += (ChosenSpell[0] + character.SpellPowerBonusDamage(SpellPower));
 		cout << "Spell successfull. Current vitality: " << Vitality << endl;
 	}
 	else
@@ -86,7 +86,7 @@ int FightingSequenceMage::WolfFight(int SpellPower, int Intelligence, int Vitali
 			continue;
 		}
 		cout << "Remaining mana: " << Mana << endl;
-		EnemyHealth = Wolf.HealthRemaining((DMG + ChosenSpell[1]));
+		EnemyHealth = Wolf.HealthRemaining(ChosenSpell[1], character.SpellPowerBonusDamage(SpellPower));
 		if (EnemyHealth <= 0)
 		{
 			break;
@@ -111,7 +111,6 @@ int FightingSequenceMage::FirstPaladinFight(int SpellPower, int Intelligence, in
 	WeakenedPaladin->SetVitality(20);
 
 	EnemyHealth = 1;
-	int DMG = character.DamageCalculation(SpellPower);
 	int Response[2];
 	int ChosenSpell[2];
 	int Mana = character.GetMana(Intelligence);
@@ -122,16 +121,16 @@ int FightingSequenceMage::FirstPaladinFight(int SpellPower, int Intelligence, in
 		cin >> Response[0];
 		if (cin.fail())
 		{
-			cout << "Invalid. Your Response must be a number not a character. Please type in a number:" << endl;
+			cout << "Invalid. Your Response must be a number not a character or 0. Please type in a number:" << endl;
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		}
 	} while (Response[0] == 0);
-	if (Response[0] <= MagePowers.NumberOfSpellsPerList && Response[0] > 0)
+	if (Response[0] <= NumberOfSpellsPerList && Response[0] > 0)
 	{
 		ChosenSpell[0] = MagePowers.MageDefenceSpells(Response[0]);
 		Mana -= MagePowers.SpellManaCost(ChosenSpell[0]);
-		Vitality += (ChosenSpell[0] + DMG);
+		Vitality += (ChosenSpell[0] + character.SpellPowerBonusDamage(SpellPower));
 		cout << "Spell successfull. Current vitality: " << Vitality << endl;
 	}
 	else
@@ -175,7 +174,7 @@ int FightingSequenceMage::FirstPaladinFight(int SpellPower, int Intelligence, in
 			continue;
 		}
 		cout << "Remaining mana: " << Mana << endl;
-		EnemyHealth = firstpaladin.HealthRemaining((DMG + ChosenSpell[1]),SpellPower);
+		EnemyHealth = firstpaladin.HealthRemaining(ChosenSpell[1], character.SpellPowerBonusDamage(SpellPower));
 		if (EnemyHealth <= 0)
 		{
 			break;
@@ -200,7 +199,6 @@ int FightingSequenceMage::SecondPaladinFight(int SpellPower, int Intelligence, i
 	fightingsecondpaladin->SetVitality(70);
 
 	EnemyHealth = 1;
-	int DMG = character.DamageCalculation(SpellPower);
 	int Response[2];
 	int ChosenSpell[2];
 	int Mana = character.GetMana(Intelligence);
@@ -211,16 +209,16 @@ int FightingSequenceMage::SecondPaladinFight(int SpellPower, int Intelligence, i
 		cin >> Response[0];
 		if (cin.fail())
 		{
-			cout << "Invalid. Your Response must be a number not a character. Please type in a number:" << endl;
+			cout << "Invalid. Your Response must be a number not a character or 0. Please type in a number:" << endl;
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		}
 	} while (Response[0] == 0);
-	if (Response[0] <= MagePowers.NumberOfSpellsPerList && Response[0] > 0)
+	if (Response[0] <= NumberOfSpellsPerList && Response[0] > 0)
 	{
 		ChosenSpell[0] = MagePowers.MageDefenceSpells(Response[0]);
 		Mana -= MagePowers.SpellManaCost(ChosenSpell[0]);
-		Vitality += (ChosenSpell[0] + DMG);
+		Vitality += (ChosenSpell[0] + character.SpellPowerBonusDamage(SpellPower));
 		cout << "Spell successfull. Current vitality: " << Vitality << endl;
 	}
 	else
@@ -264,7 +262,7 @@ int FightingSequenceMage::SecondPaladinFight(int SpellPower, int Intelligence, i
 			continue;
 		}
 		cout << "Remaining mana: " << Mana << endl;
-		EnemyHealth = secondpaladin.HealthRemaining((DMG + ChosenSpell[1]));
+		EnemyHealth = secondpaladin.HealthRemaining(ChosenSpell[1], character.SpellPowerBonusDamage(SpellPower));
 		if (EnemyHealth <= 0)
 		{
 			break;
@@ -290,7 +288,6 @@ int FightingSequenceMage::RematchInTheTomb(int SpellPower, int Intelligence, int
 
 	EnemyHealth = 1;
 	int DeflectorSpell = 20;
-	int DMG = character.DamageCalculation(SpellPower);
 	int Response[2];
 	int ChosenSpell[2];
 	int Mana = character.GetMana(Intelligence);
@@ -301,16 +298,16 @@ int FightingSequenceMage::RematchInTheTomb(int SpellPower, int Intelligence, int
 		cin >> Response[0];
 		if (cin.fail())
 		{
-			cout << "Invalid. Your Response must be a number not a character. Please type in a number:" << endl;
+			cout << "Invalid. Your Response must be a number not a character or 0. Please type in a number:" << endl;
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		}
 	} while (Response[0] == 0);
-	if (Response[0] <= MagePowers.NumberOfSpellsPerList && Response[0] > 0)
+	if (Response[0] <= NumberOfSpellsPerList && Response[0] > 0)
 	{
 		ChosenSpell[0] = MagePowers.MageDefenceSpells(Response[0]);
 		Mana -= (ChosenSpell[0] * ChosenSpell[0]);
-		Vitality += (ChosenSpell[0] + DMG);
+		Vitality += (ChosenSpell[0] + character.SpellPowerBonusDamage(SpellPower));
 		cout << "Spell successfull. Current vitality: " << Vitality << endl;
 	}
 	else
@@ -358,7 +355,7 @@ int FightingSequenceMage::RematchInTheTomb(int SpellPower, int Intelligence, int
 		if (DeflectorSpell <= 0)
 		{
 			cout << "Remaining mana: " << Mana << endl;
-			EnemyHealth = secondpaladin.HealthRemaining((DMG + ChosenSpell[1] + MagePowers.ElementalChainBonusDMG(Response[1], PreviousSpell)));
+			EnemyHealth = secondpaladin.HealthRemaining(ChosenSpell[1], character.SpellPowerBonusDamage(SpellPower) + MagePowers.ElementalChainBonusDMG(Response[1], PreviousSpell));
 		}
 		else if (DeflectorSpell > 0) 
 		{
@@ -390,7 +387,6 @@ int FightingSequenceMage::EarthGuardian(int SpellPower, int Intelligence, int Vi
 	FightingGuardian->SetVitality(60);
 
 	EnemyHealth = 1;
-	int DMG = character.DamageCalculation(SpellPower);
 	int Response[2];
 	int ChosenSpell[2];
 	int Mana = character.GetMana(Intelligence);
@@ -401,16 +397,16 @@ int FightingSequenceMage::EarthGuardian(int SpellPower, int Intelligence, int Vi
 		cin >> Response[0];
 		if (cin.fail())
 		{
-			cout << "Invalid. Your Response must be a number not a character. Please type in a number:" << endl;
+			cout << "Invalid. Your Response must be a number not a character or 0. Please type in a number:" << endl;
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		}
 	} while (Response[0] == 0);
-	if (Response[0] <= MagePowers.NumberOfSpellsPerList && Response[0] > 0)
+	if (Response[0] <= NumberOfSpellsPerList && Response[0] > 0)
 	{
 		ChosenSpell[0] = MagePowers.MageDefenceSpells(Response[0]);
 		Mana -= (ChosenSpell[0] * ChosenSpell[0]);
-		Vitality += (ChosenSpell[0] + DMG);
+		Vitality += (ChosenSpell[0] + character.SpellPowerBonusDamage(SpellPower));
 		cout << "Spell successfull. Current vitality: " << Vitality << endl;
 	}
 	else
@@ -453,7 +449,7 @@ int FightingSequenceMage::EarthGuardian(int SpellPower, int Intelligence, int Vi
 			}
 			continue;
 		}
-		EnemyHealth = earthgolem.HealthRemaining((DMG + ChosenSpell[1]), SpellPower);
+		EnemyHealth = earthgolem.HealthRemaining(ChosenSpell[1], character.SpellPowerBonusDamage(SpellPower));
 		if (EnemyHealth <= 0)
 		{
 			break;
@@ -477,7 +473,6 @@ int FightingSequenceMage::FireGuardian(int SpellPower, int Intelligence, int Vit
 
 	EnemyHealth = 1;
 	int ShieldStrength = 1;
-	int DMG = character.DamageCalculation(SpellPower);
 	int Response;
 	int ChosenSpell;
 	int Mana = character.GetMana(Intelligence);
@@ -512,13 +507,13 @@ int FightingSequenceMage::FireGuardian(int SpellPower, int Intelligence, int Vit
 				if (Mana >= MagePowers.SpellManaCost(ChosenSpell))
 				{
 					Mana -= MagePowers.SpellManaCost(ChosenSpell);
-					if (ShieldStrength == 0 && ChosenSpell == MagePowers.JadeBlast)
+					if (ShieldStrength == 0 && ChosenSpell == JadeBlast)
 					{
 						cout << "The ice shatters and the elemental cant regenerate." << endl;
 						EnemyHealth = 0;
 						continue;
 					}
-					ShieldStrength = firelemental.HealthRemaining((ChosenSpell + DMG), SpellPower);
+					ShieldStrength = firelemental.HealthRemaining(ChosenSpell, character.SpellPowerBonusDamage(SpellPower));
 				}
 				else if (Mana < (ChosenSpell * ChosenSpell))
 				{
@@ -554,7 +549,6 @@ int FightingSequenceMage::ThirdPaladinFight(int SpellPower, int Intelligence, in
 	fightingthirdpaladin->SetVitality(150);
 	
 	EnemyHealth = 1;
-	int DMG = character.DamageCalculation(SpellPower);
 	int Response[2];
 	int ChosenSpell[2];
 	int Mana = character.GetMana(Intelligence);
@@ -565,16 +559,16 @@ int FightingSequenceMage::ThirdPaladinFight(int SpellPower, int Intelligence, in
 		cin >> Response[0];
 		if (cin.fail())
 		{
-			cout << "Invalid. Your Response must be a number not a character. Please type in a number:" << endl;
+			cout << "Invalid. Your Response must be a number not a character or 0. Please type in a number:" << endl;
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		}
 	} while (Response[0] == 0);
-	if (Response[0] <= MagePowers.NumberOfSpellsPerList && Response[0] > 0)
+	if (Response[0] <= NumberOfSpellsPerList && Response[0] > 0)
 	{
 		ChosenSpell[0] = MagePowers.MageDefenceSpells(Response[0]);
 		Mana -= (ChosenSpell[0] * ChosenSpell[0]);
-		Vitality += (ChosenSpell[0] + DMG);
+		Vitality += (ChosenSpell[0] + character.SpellPowerBonusDamage(SpellPower));
 		cout << "Spell successfull. Current vitality: " << Vitality << endl;
 	}
 	else
@@ -617,7 +611,7 @@ int FightingSequenceMage::ThirdPaladinFight(int SpellPower, int Intelligence, in
 			}
 			continue;
 		}
-		EnemyHealth = paladin.HealthRemaining((DMG + ChosenSpell[1]),SpellPower);
+		EnemyHealth = paladin.HealthRemaining(ChosenSpell[1], character.SpellPowerBonusDamage(SpellPower));
 		if (EnemyHealth <= 0) 
 		{
 			break;
@@ -642,7 +636,6 @@ int FightingSequenceMage::TheFinalGuardianFight(int SpellPower, int Intelligence
 
 	EnemyHealth = 1;
 	int AvailableGuardianSkills = 1;
-	int DMG = character.DamageCalculation(SpellPower);
 	int Response[2];
 	int ChosenSpell[2];
 	int Mana = character.GetMana(Intelligence);
@@ -653,16 +646,16 @@ int FightingSequenceMage::TheFinalGuardianFight(int SpellPower, int Intelligence
 		cin >> Response[0];
 		if (cin.fail())
 		{
-			cout << "Invalid. Your Response must be a number not a character. Please type in a number:" << endl;
+			cout << "Invalid. Your Response must be a number not a character or 0. Please type in a number:" << endl;
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		}
 	} while (Response[0] == 0);
-	if (Response[0] <= MagePowers.NumberOfSpellsPerList && Response[0] > 0)
+	if (Response[0] <= NumberOfSpellsPerList && Response[0] > 0)
 	{
 		ChosenSpell[0] = MagePowers.MageDefenceSpells(Response[0]);
 		Mana -= (ChosenSpell[0] * ChosenSpell[0]);
-		Vitality += (ChosenSpell[0] + DMG);
+		Vitality += (ChosenSpell[0] + character.SpellPowerBonusDamage(SpellPower));
 		cout << "Spell successfull. Current vitality: " << Vitality << endl;
 	}
 	else
@@ -716,7 +709,7 @@ int FightingSequenceMage::TheFinalGuardianFight(int SpellPower, int Intelligence
 				continue;
 			}
 		} while (Response[1] > MagePowers.SpellsToShow() || Response[1] <= 0);
-		EnemyHealth = TheGuardian.HealthRemaining((ChosenSpell[1] + DMG), SpellPower);
+		EnemyHealth = TheGuardian.HealthRemaining(ChosenSpell[1], character.SpellPowerBonusDamage(SpellPower));
 		if (EnemyHealth <= 0)
 		{
 			break;
@@ -744,7 +737,6 @@ int FightingSequenceMage::FinalPaladinFight(int SpellPower, int Intelligence, in
 	fightingthirdpaladin->SetDamage(8);
 	fightingthirdpaladin->SetVitality(100);
 	EnemyHealth = 1;
-	int DMG = character.DamageCalculation(SpellPower);
 	int Response[2];
 	int ChosenSpell[2];
 	int Mana = character.GetMana(Intelligence);
@@ -755,16 +747,16 @@ int FightingSequenceMage::FinalPaladinFight(int SpellPower, int Intelligence, in
 		cin >> Response[0];
 		if (cin.fail())
 		{
-			cout << "Invalid. Your Response must be a number not a character. Please type in a number:" << endl;
+			cout << "Invalid. Your Response must be a number not a character or 0. Please type in a number:" << endl;
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		}
 	} while (Response[0] == 0);
-	if (Response[0] <= MagePowers.NumberOfSpellsPerList && Response[0] > 0)
+	if (Response[0] <= NumberOfSpellsPerList && Response[0] > 0)
 	{
 		ChosenSpell[0] = MagePowers.MageDefenceSpells(Response[0]);
 		Mana -= (ChosenSpell[0] * ChosenSpell[0]);
-		Vitality += (ChosenSpell[0] + DMG);
+		Vitality += (ChosenSpell[0] + character.SpellPowerBonusDamage(SpellPower));
 		cout << "Spell successfull. Current vitality: " << Vitality << endl;
 	}
 	else
@@ -808,8 +800,7 @@ int FightingSequenceMage::FinalPaladinFight(int SpellPower, int Intelligence, in
 			}
 			continue;
 		}
-		ElementalChainBonus = MagePowers.ElementalChainBonusDMG(ChosenSpell[1], PreviousSpell);
-		EnemyHealth = paladin.HealthRemaining((DMG + ChosenSpell[1] + ElementalChainBonus), SpellPower);
+		EnemyHealth = paladin.HealthRemaining(ChosenSpell[1], character.SpellPowerBonusDamage(SpellPower) + MagePowers.ElementalChainBonusDMG(ChosenSpell[1], PreviousSpell));
 		if (EnemyHealth <= 0)
 		{
 			break;
@@ -832,58 +823,39 @@ int FightingSequenceMage::KingFight(int SpellPower, int Intelligence, int Vitali
 	FightingKing->SetVitality(200);
 
 	EnemyHealth = 1;
-	int DMG = character.DamageCalculation(SpellPower);
 	int Response[3];
-	int ChosenSpell[2];
+	int ChosenSpell[3];
 	int Mana = character.GetMana(Intelligence);
 	cout << "Current mana: " << Mana << endl;
-	MagePowers.DefenceSPellsInfo(SpellPower);
-	do
-	{
-		cin >> Response[0];
-		if (cin.fail())
-		{
-			cout << "Invalid. Your Response must be a number not a character. Please type in a number:" << endl;
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		}
-	} while (Response[0] == 0);
-	if (Response[0] <= MagePowers.NumberOfSpellsPerList && Response[0] > 0)
-	{
-		ChosenSpell[0] = MagePowers.MageDefenceSpells(Response[0]);
-		Mana -= (ChosenSpell[0] * ChosenSpell[0]);
-		Vitality += (ChosenSpell[0] + DMG);
-		cout << "First Spell successfull. Current vitality: " << Vitality << endl;
-	}
-	else
-	{
-		cout << "Defence menu closed." << endl;
-	}
-	cout << "Second cast" << endl;
-	cout << "Current mana: " << Mana << endl;
-	MagePowers.DefenceSPellsInfo(SpellPower);
-	do
-	{
-		cin >> Response[1];
-		if (cin.fail())
-		{
-			cout << "Invalid. Your Response must be a number not a character. Please type in a number:" << endl;
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		}
-	} while (Response[1] == 0);
-	if (Response[1] <= MagePowers.NumberOfSpellsPerList && Response[1] > 0)
-	{
-		ChosenSpell[1] = MagePowers.MageDefenceSpells(Response[0]);
-		Mana -= (ChosenSpell[1] * ChosenSpell[1]);
-		Vitality += (ChosenSpell[1] + DMG);
-		cout << "Second Spell successfull. Current vitality: " << Vitality << endl;
-	}
-	else
-	{
-		cout << "Defence menu closed." << endl;
-	}
 
+	for (int i = 0; i <= 1; i++)
+	{
+		MagePowers.DefenceSPellsInfo(SpellPower);
+		do
+		{
+			cin >> Response[0];
+			if (cin.fail())
+			{
+				cout << "Invalid. Your Response must be a number not a character or 0. Please type in a number:" << endl;
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			}
+		} while (Response[0] == 0);
+		if (Response[0] <= NumberOfSpellsPerList && Response[0] > 0)
+		{
+			ChosenSpell[0] = MagePowers.MageDefenceSpells(Response[0]);
+			Mana -= (ChosenSpell[0] * ChosenSpell[0]);
+			Vitality += (ChosenSpell[0] + character.SpellPowerBonusDamage(SpellPower));
+			cout << "Spell successfull. Current vitality: " << Vitality << endl;
+		}
+		else
+		{
+			cout << "Defence menu closed." << endl;
+			cout << "Current vitality: " << Vitality << endl;
+		}
+	}
+	cout << "Current mana: " << Mana << endl;
+	
 	MagePowers.GetNumberOfSpellsAvailiable(Intelligence);
 
 	do
@@ -920,7 +892,7 @@ int FightingSequenceMage::KingFight(int SpellPower, int Intelligence, int Vitali
 			}
 			continue;
 		}
-		EnemyHealth = King.HealthRemaining((DMG + ChosenSpell[1]),SpellPower);
+		EnemyHealth = King.HealthRemaining(ChosenSpell[2],character.SpellPowerBonusDamage(SpellPower));
 		if (EnemyHealth <= 0)
 		{
 			break;
