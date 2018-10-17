@@ -1,2 +1,15 @@
-﻿  FightingSequence.cpp
-  RPGGame.vcxproj -> D:\VSUE4BLENDER\Visual Projects\RPGGame\Debug\RPGGame.exe
+﻿  stdafx.cpp
+  Character.cpp
+  ClassItemsPowers.cpp
+  Enemy.cpp
+d:\githubprojects\rpggame\rpggame\enemy.cpp(165): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+d:\githubprojects\rpggame\rpggame\enemy.cpp(243): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+d:\githubprojects\rpggame\rpggame\enemy.cpp(314): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+d:\githubprojects\rpggame\rpggame\enemy.cpp(332): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  FightingSequence.cpp
+  RPGGame.cpp
+  Story.cpp
+d:\githubprojects\rpggame\rpggame\story.cpp(147): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
+d:\githubprojects\rpggame\rpggame\character.cpp(87): warning C4715: 'Character::IsCharacterDead': not all control paths return a value
+  RPGGame.vcxproj -> D:\GitHubProjects\RPGGame\Debug\RPGGame.exe

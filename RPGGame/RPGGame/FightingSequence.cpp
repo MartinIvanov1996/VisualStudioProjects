@@ -12,6 +12,8 @@ using namespace std;
 
 // Enemy health set to 1 in all fight in beggining for protection of early cycle exit
 
+// TODO create shield variable and use it where needed
+
 int FightingSequenceMage::WolfFight(int SpellPower, int Intelligence, int Vitality)
 {
 	Character character;
@@ -86,13 +88,13 @@ int FightingSequenceMage::WolfFight(int SpellPower, int Intelligence, int Vitali
 			continue;
 		}
 		cout << "Remaining mana: " << Mana << endl;
-		EnemyHealth = Wolf.HealthRemaining(ChosenSpell[1], character.SpellPowerBonusDamage(SpellPower));
+		EnemyHealth = enemywolf->HealthRemaining(ChosenSpell[1], character.SpellPowerBonusDamage(SpellPower));
 		if (EnemyHealth <= 0)
 		{
 			break;
 		}
 
-		Vitality -= Wolf.Attacking();
+		Vitality -= enemywolf->Attacking();
 		cout << "Your current health: " << Vitality << endl;
 		system("pause");
 		system("cls");
@@ -174,13 +176,13 @@ int FightingSequenceMage::FirstPaladinFight(int SpellPower, int Intelligence, in
 			continue;
 		}
 		cout << "Remaining mana: " << Mana << endl;
-		EnemyHealth = firstpaladin.HealthRemaining(ChosenSpell[1], character.SpellPowerBonusDamage(SpellPower));
+		EnemyHealth = WeakenedPaladin->HealthRemaining(ChosenSpell[1], character.SpellPowerBonusDamage(SpellPower));
 		if (EnemyHealth <= 0)
 		{
 			break;
 		}
 
-		Vitality -= firstpaladin.Attacking();
+		Vitality -= WeakenedPaladin->Attacking();
 		cout << "Your current health: " << Vitality << endl;
 		system("pause");
 		system("cls");
@@ -262,13 +264,13 @@ int FightingSequenceMage::SecondPaladinFight(int SpellPower, int Intelligence, i
 			continue;
 		}
 		cout << "Remaining mana: " << Mana << endl;
-		EnemyHealth = secondpaladin.HealthRemaining(ChosenSpell[1], character.SpellPowerBonusDamage(SpellPower));
+		EnemyHealth = fightingsecondpaladin->HealthRemaining(ChosenSpell[1], character.SpellPowerBonusDamage(SpellPower));
 		if (EnemyHealth <= 0)
 		{
 			break;
 		}
 
-		Vitality -= secondpaladin.Attacking();
+		Vitality -= fightingsecondpaladin->Attacking();
 		cout << "Your current health: " << Vitality << endl;
 		system("pause");
 		system("cls");
@@ -355,7 +357,7 @@ int FightingSequenceMage::RematchInTheTomb(int SpellPower, int Intelligence, int
 		if (DeflectorSpell <= 0)
 		{
 			cout << "Remaining mana: " << Mana << endl;
-			EnemyHealth = secondpaladin.HealthRemaining(ChosenSpell[1], character.SpellPowerBonusDamage(SpellPower) + MagePowers.ElementalChainBonusDMG(Response[1], PreviousSpell));
+			EnemyHealth = fightingsecondpaladin->HealthRemaining(ChosenSpell[1], character.SpellPowerBonusDamage(SpellPower) + MagePowers.ElementalChainBonusDMG(Response[1], PreviousSpell));
 		}
 		else if (DeflectorSpell > 0) 
 		{
@@ -368,7 +370,7 @@ int FightingSequenceMage::RematchInTheTomb(int SpellPower, int Intelligence, int
 		{
 			break;
 		}
-		Vitality -= secondpaladin.Attacking();
+		Vitality -= fightingsecondpaladin->Attacking();
 		cout << "Your current health: " << Vitality << endl;
 		system("pause");
 		system("cls");
@@ -449,12 +451,12 @@ int FightingSequenceMage::EarthGuardian(int SpellPower, int Intelligence, int Vi
 			}
 			continue;
 		}
-		EnemyHealth = earthgolem.HealthRemaining(ChosenSpell[1], character.SpellPowerBonusDamage(SpellPower));
+		EnemyHealth = FightingGuardian->HealthRemaining(ChosenSpell[1], character.SpellPowerBonusDamage(SpellPower));
 		if (EnemyHealth <= 0)
 		{
 			break;
 		}
-		Vitality -= earthgolem.Attacking();
+		Vitality -= FightingGuardian->Attacking();
 		cout << "Your current health: " << Vitality << endl;
 		system("pause");
 		system("cls");
@@ -484,7 +486,7 @@ int FightingSequenceMage::FireGuardian(int SpellPower, int Intelligence, int Vit
 		// If its a block of ice it cant attack you
 		if (ShieldStrength > 0)
 		{
-			Vitality -= firelemental.Attacking();
+			Vitality -= FightingElement->Attacking();
 		}
 		cout << "Your current health: " << Vitality << endl;
 		if (Vitality <= 0) { continue; }
@@ -513,7 +515,7 @@ int FightingSequenceMage::FireGuardian(int SpellPower, int Intelligence, int Vit
 						EnemyHealth = 0;
 						continue;
 					}
-					ShieldStrength = firelemental.HealthRemaining(ChosenSpell, character.SpellPowerBonusDamage(SpellPower));
+					ShieldStrength = FightingElement->HealthRemaining(ChosenSpell, character.SpellPowerBonusDamage(SpellPower));
 				}
 				else if (Mana < (ChosenSpell * ChosenSpell))
 				{
@@ -611,12 +613,12 @@ int FightingSequenceMage::ThirdPaladinFight(int SpellPower, int Intelligence, in
 			}
 			continue;
 		}
-		EnemyHealth = paladin.HealthRemaining(ChosenSpell[1], character.SpellPowerBonusDamage(SpellPower));
+		EnemyHealth = fightingthirdpaladin->HealthRemaining(ChosenSpell[1], character.SpellPowerBonusDamage(SpellPower));
 		if (EnemyHealth <= 0) 
 		{
 			break;
 		}
-		Vitality -= paladin.Attacking();
+		Vitality -= fightingthirdpaladin->Attacking();
 		cout << "Your current health: " << Vitality << endl;
 		system("pause");
 		system("cls");
@@ -629,10 +631,10 @@ int FightingSequenceMage::TheFinalGuardianFight(int SpellPower, int Intelligence
 	Character character;
 	MageItemsAndPowers MagePowers;
 	FinalGuardian TheGuardian;
-	Enemies* GuardianStats = &TheGuardian;
+	Enemies* FightingFinalGuardian = &TheGuardian;
 
-	GuardianStats->SetDamage(4);
-	GuardianStats->SetVitality(100);
+	FightingFinalGuardian->SetDamage(4);
+	FightingFinalGuardian->SetVitality(100);
 
 	EnemyHealth = 1;
 	int AvailableGuardianSkills = 1;
@@ -667,7 +669,7 @@ int FightingSequenceMage::TheFinalGuardianFight(int SpellPower, int Intelligence
 
 	do
 	{
-		Vitality -= TheGuardian.Attacking();
+		Vitality -= FightingFinalGuardian->Attacking();
 		cout << "Your current health: " << Vitality << endl;
 		if (Vitality <= 0) 
 		{
@@ -709,7 +711,7 @@ int FightingSequenceMage::TheFinalGuardianFight(int SpellPower, int Intelligence
 				continue;
 			}
 		} while (Response[1] > MagePowers.SpellsToShow() || Response[1] <= 0);
-		EnemyHealth = TheGuardian.HealthRemaining(ChosenSpell[1], character.SpellPowerBonusDamage(SpellPower));
+		EnemyHealth = FightingFinalGuardian->HealthRemaining(ChosenSpell[1], character.SpellPowerBonusDamage(SpellPower));
 		if (EnemyHealth <= 0)
 		{
 			break;
@@ -800,12 +802,12 @@ int FightingSequenceMage::FinalPaladinFight(int SpellPower, int Intelligence, in
 			}
 			continue;
 		}
-		EnemyHealth = paladin.HealthRemaining(ChosenSpell[1], character.SpellPowerBonusDamage(SpellPower) + MagePowers.ElementalChainBonusDMG(ChosenSpell[1], PreviousSpell));
+		EnemyHealth = fightingthirdpaladin->HealthRemaining(ChosenSpell[1], character.SpellPowerBonusDamage(SpellPower) + MagePowers.ElementalChainBonusDMG(ChosenSpell[1], PreviousSpell));
 		if (EnemyHealth <= 0)
 		{
 			break;
 		}
-		Vitality -= paladin.Attacking();
+		Vitality -= fightingthirdpaladin->Attacking();
 		cout << "Your current health: " << Vitality << endl;
 		system("pause");
 		system("cls");
@@ -892,12 +894,12 @@ int FightingSequenceMage::KingFight(int SpellPower, int Intelligence, int Vitali
 			}
 			continue;
 		}
-		EnemyHealth = King.HealthRemaining(ChosenSpell[2],character.SpellPowerBonusDamage(SpellPower));
+		EnemyHealth = FightingKing->HealthRemaining(ChosenSpell[2],character.SpellPowerBonusDamage(SpellPower));
 		if (EnemyHealth <= 0)
 		{
 			break;
 		}
-		Vitality -= King.Attacking();
+		Vitality -= FightingKing->Attacking();
 		cout << "Your current health: " << Vitality << endl;
 		system("pause");
 		system("cls");

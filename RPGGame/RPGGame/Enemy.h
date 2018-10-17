@@ -1,5 +1,7 @@
 #pragma once
 
+// TODO create virtual skill function (not pure)
+
 class Enemies
 {
 public:
