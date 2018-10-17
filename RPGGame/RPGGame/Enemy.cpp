@@ -160,7 +160,7 @@ int FireElemental::HealthRemaining(int SpellDamage, int BonusDamageFromSPorEC)
 	return FireProtection;
 }
 
-int ThirdAndFourthPaladin::Skills(int agility)
+int ThirdAndFourthPaladin::Skills()
 {
 	srand(time(NULL));
 	int ChosenSkill = rand() % 3;
@@ -188,7 +188,7 @@ int ThirdAndFourthPaladin::Skills(int agility)
 
 int ThirdAndFourthPaladin::Attacking()
 {
-	DMGFromSkill = Skills(Agility);
+	DMGFromSkill = Skills();
 	cout << "Damage Inflicted by paladin: " << (Damage + DMGFromSkill)<< endl;
 	return (Damage + DMGFromSkill);
 }

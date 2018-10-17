@@ -14,7 +14,8 @@ public:
 	int FinalPaladinFight(int,int,int);
 	int KingFight(int,int,int);
 private:
-	int PreviousSpell = 0;
+	int PreviousSpell = 1;
+	int EnemyShield = 1;
 	//variable is used in all fights setting itself as the remaining health 
 	int EnemyHealth = 1;
 };

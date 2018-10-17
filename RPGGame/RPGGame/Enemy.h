@@ -1,12 +1,11 @@
 #pragma once
 
-// TODO create virtual skill function (not pure)
-
 class Enemies
 {
 public:
 	virtual int Attacking() = 0;
 	virtual int HealthRemaining(int,int) = 0;
+
 	void SetDamage(int);
 	void SetVitality(int);
 protected:
@@ -69,7 +68,7 @@ class ThirdAndFourthPaladin : public Enemies
 public:
 	int Attacking();
 	int HealthRemaining(int, int);
-	int Skills(int);
+	int Skills();
 
 private:
 	int Agility = 100;

@@ -12,8 +12,6 @@ using namespace std;
 
 // Enemy health set to 1 in all fight in beggining for protection of early cycle exit
 
-// TODO create shield variable and use it where needed
-
 int FightingSequenceMage::WolfFight(int SpellPower, int Intelligence, int Vitality)
 {
 	Character character;
@@ -289,7 +287,7 @@ int FightingSequenceMage::RematchInTheTomb(int SpellPower, int Intelligence, int
 	fightingsecondpaladin->SetVitality(80);
 
 	EnemyHealth = 1;
-	int DeflectorSpell = 20;
+	EnemyShield = 20;
 	int Response[2];
 	int ChosenSpell[2];
 	int Mana = character.GetMana(Intelligence);
@@ -354,16 +352,16 @@ int FightingSequenceMage::RematchInTheTomb(int SpellPower, int Intelligence, int
 			continue;
 		}
 		// Checks if damage wont be negated by enemy spells
-		if (DeflectorSpell <= 0)
+		if (EnemyShield <= 0)
 		{
 			cout << "Remaining mana: " << Mana << endl;
 			EnemyHealth = fightingsecondpaladin->HealthRemaining(ChosenSpell[1], character.SpellPowerBonusDamage(SpellPower) + MagePowers.ElementalChainBonusDMG(Response[1], PreviousSpell));
 		}
-		else if (DeflectorSpell > 0) 
+		else if (EnemyShield > 0)
 		{
-			DeflectorSpell -= ChosenSpell[1];
+			EnemyShield -= ChosenSpell[1];
 			cout << "Spell was deflected but you feel the barrier weakening." << endl;
-			cout << "Barried strenght: " << DeflectorSpell << endl;
+			cout << "Barried strenght: " << EnemyShield << endl;
 		}
 
 		if (EnemyHealth <= 0)
@@ -474,7 +472,7 @@ int FightingSequenceMage::FireGuardian(int SpellPower, int Intelligence, int Vit
 	FightingElement->SetDamage(5);
 
 	EnemyHealth = 1;
-	int ShieldStrength = 1;
+	EnemyShield = 1;
 	int Response;
 	int ChosenSpell;
 	int Mana = character.GetMana(Intelligence);
@@ -484,7 +482,7 @@ int FightingSequenceMage::FireGuardian(int SpellPower, int Intelligence, int Vit
 	do
 	{
 		// If its a block of ice it cant attack you
-		if (ShieldStrength > 0)
+		if (EnemyShield > 0)
 		{
 			Vitality -= FightingElement->Attacking();
 		}
@@ -509,13 +507,13 @@ int FightingSequenceMage::FireGuardian(int SpellPower, int Intelligence, int Vit
 				if (Mana >= MagePowers.SpellManaCost(ChosenSpell))
 				{
 					Mana -= MagePowers.SpellManaCost(ChosenSpell);
-					if (ShieldStrength == 0 && ChosenSpell == JadeBlast)
+					if (EnemyShield == 0 && ChosenSpell == JadeBlast)
 					{
 						cout << "The ice shatters and the elemental cant regenerate." << endl;
 						EnemyHealth = 0;
 						continue;
 					}
-					ShieldStrength = FightingElement->HealthRemaining(ChosenSpell, character.SpellPowerBonusDamage(SpellPower));
+					EnemyShield = FightingElement->HealthRemaining(ChosenSpell, character.SpellPowerBonusDamage(SpellPower));
 				}
 				else if (Mana < (ChosenSpell * ChosenSpell))
 				{
